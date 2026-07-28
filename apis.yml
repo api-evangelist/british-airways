@@ -1,0 +1,94 @@
+aid: british-airways
+url: https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/apis.yml
+name: British Airways
+kind: company
+description: >-
+  British Airways Plc is the United Kingdom's flag carrier, headquartered at Waterside near
+  London Heathrow and owned since 2011 by International Consolidated Airlines Group (IAG),
+  which also owns Iberia, Aer Lingus, Vueling and LEVEL. In the distribution chain BA is a
+  supplier of its own seat inventory, reached either through the three legacy GDSs, through
+  IATA NDC connections it operates itself, or direct on ba.com. BA was one of the earliest
+  and most aggressive NDC adopters: from 1 November 2017 IAG applied a per-fare-component
+  Distribution Technology Charge to BA and Iberia marketed fares that are not booked through
+  an NDC based connection or a low-cost channel such as ba.com, explicitly pricing GDS
+  intermediation out of the stack. Its API posture is honest to state plainly - the NDC
+  distribution API is real and is built on the IATA EDIST message set, but there is no public
+  specification, no published base URL, no self-serve signup and no exit path. Access requires
+  registration, a B1 or B2 certification form, acceptance of the British Airways API and
+  Services Trial Use Agreement plus the Travel Agency Addendum for IATA accredited agents, and
+  signed live API contracts. The older public consumer REST APIs (Flight Information, Flight
+  Offers, Lowest Prices, In-Flight Entertainment, Hotel/Car/Flight packages) on the IAG
+  Developer Programs portal are gone: as of 2026-07-28 developer.iairgroup.com returns HTTP 404
+  and api.ba.com returns HTTP 596 ERR_596_SERVICE_NOT_FOUND for every documented resource.
+image: https://images.ctfassets.net/nwnmkeyu03hy/1qDtSOnE37fsTzD4GPdfFN/347c175022b9aec007a10630028a4439/British-Airways-logo.png
+tags:
+- Travel
+- United Kingdom
+- Aviation
+- Airline
+- Distribution
+- NDC
+- Booking
+- Corporate Travel
+- Airports
+created: '2026-07-28'
+modified: '2026-07-28'
+specificationVersion: '0.19'
+apis:
+- aid: british-airways:british-airways-ndc-api
+  name: British Airways NDC API
+  description: >-
+    British Airways' IATA New Distribution Capability API - a direct link into BA's host
+    reservation system for flight shopping, ordering, ticketing and post-booking servicing,
+    operated jointly across IAG for BA and Iberia. It implements the IATA EDIST message set
+    (the ndc.ba.com application carries the XML namespace
+    http://www.iata.org/IATA/EDIST/2017.2), with a 21.3 pilot programme running alongside the
+    17.2 production version. The IAG developer portal described the 17.2 plan as AirShopping,
+    OfferPrice, SeatAvailability, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange,
+    OrderReShop and OrderChangeNotif. No OpenAPI or WSDL is published, no production base URL
+    is published, and there is no self-serve access - see review.yml for the full certification
+    and contracting path.
+  humanURL: https://ndc.ba.com/developer/api-documentation
+  tags:
+  - NDC
+  - Distribution
+  - Flights
+  - Booking
+  - Ticketing
+  properties:
+  - type: Documentation
+    url: https://ndc.ba.com/developer/api-documentation
+  - type: Portal
+    url: https://ndc.ba.com/
+  - type: GettingStarted
+    url: https://ndc.ba.com/start/build-and-test-the-api
+  - type: Signup
+    url: https://ndc.ba.com/start/ndc-registrations
+  - type: Support
+    url: https://ndc.ba.com/faq/technical
+  - type: Documentation
+    url: https://ndc.ba.com/capability/ndc-offer-management
+  - type: Documentation
+    url: https://ndc.ba.com/capability/ndc-order-management
+  - type: LegacyPortal
+    url: https://developer.iairgroup.com/british_airways
+common:
+- type: Website
+  url: https://www.britishairways.com/
+- type: Portal
+  url: https://ndc.ba.com/
+- type: PartnerPortal
+  url: https://www.britishairways.com/travel-partner-connect/en/kr/policies/booking-and-ticketing/distribution-technology-charge-guide
+- type: Documentation
+  url: https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf
+- type: LegacyPortal
+  url: https://developer.iairgroup.com/british_airways
+- type: Newsroom
+  url: https://mediacentre.britishairways.com/
+- type: Investors
+  url: https://www.iairgroup.com/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/british-airways
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

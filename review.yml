@@ -1,0 +1,425 @@
+aid: british-airways
+name: British Airways
+review:
+  question: >-
+    Does British Airways publish a public, self-serve developer surface, and what would it
+    cost a customer to leave British Airways as a distribution supplier?
+  answer: false
+  date: '2026-07-28'
+  reviewer: API Evangelist
+  summary: >-
+    No. British Airways has no self-serve developer portal and no machine-readable API
+    contract in the public domain. Its only live API-facing property is ndc.ba.com, the
+    British Airways NDC Communication Hub, an Angular single-page application whose
+    documentation, sandbox and registration flows sit behind a Microsoft Entra External ID
+    login. The historic IAG Developer Programs portal (TIBCO Mashery) that carried BA's
+    public consumer REST APIs is gone.
+
+findings:
+  portals:
+  - url: https://ndc.ba.com/
+    status: 200
+    fetched: '2026-07-28'
+    verdict: live
+    note: >-
+      British Airways NDC Communication Hub. Angular SPA served from Contentful
+      (space nwnmkeyu03hy). Every path returns the same ~17KB SPA shell, so HTTP 200 is not
+      evidence that a given page renders content unauthenticated. The app bundle
+      (main.7a41cb6e4d2487f7.js, 3.8MB, fetched 2026-07-28) carries the full router, an
+      MSAL / Microsoft Entra External ID login against
+      https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527, and the IATA
+      EDIST XML namespace http://www.iata.org/IATA/EDIST/2017.2.
+  - url: https://developer.iairgroup.com/british_airways
+    status: 404
+    fetched: '2026-07-28'
+    verdict: dead
+    note: >-
+      IAG Developer Programs portal. Responds `Area Not found` (14 bytes) with
+      `server: Mashery Proxy`. Every path tried returned 404, including /, /robots.txt,
+      /sitemap.xml, /british_airways/ApiInfo, /british_airways/plans/ndc, /iberia and
+      /files/BA_NDC_Pilot_B1_Certification_Form.pdf. Internet Archive CDX shows successful
+      200 captures on 2025-03-13, 2025-05-23 and 2026-02-11, so the portal was live as
+      recently as February 2026 and has since been withdrawn.
+  - url: https://developer.ba.com/
+    status: 200
+    fetched: '2026-07-28'
+    verdict: not-a-portal
+    note: >-
+      Returns the generic ba.com "British Airways - Information Page" holding page
+      ("We are experiencing high demand on ba.com at the moment"), not a developer portal.
+      The archived IAG portal's own JavaScript redirected developer.ba.com to
+      developer.iairgroup.com/british_airways.
+  - url: https://developer.britishairways.com/
+    status: 000
+    fetched: '2026-07-28'
+    verdict: does-not-resolve
+  - url: https://developers.britishairways.com/
+    status: 000
+    fetched: '2026-07-28'
+    verdict: does-not-resolve
+  - url: https://docs.britishairways.com/
+    status: 000
+    fetched: '2026-07-28'
+    verdict: does-not-resolve
+  - url: https://api.britishairways.com/
+    status: 403
+    fetched: '2026-07-28'
+    verdict: blocked
+  gateways:
+  - url: https://api.ba.com/
+    status: 596
+    fetched: '2026-07-28'
+    note: >-
+      `x-mashery-error-code: ERR_596_SERVICE_NOT_FOUND`, content-type text/xml. The same 596
+      is returned for /rest-v1/, /rest-v1/v1/flights, /rest-v1/v1/flights.json,
+      /rest-v1/v1/ife.xml and /rest-v1/v1/flightStatus.json, with and without an api_key
+      query parameter. No service is mapped behind the gateway - BA's documented public REST
+      API is decommissioned.
+  contractProbes:
+    note: >-
+      www.britishairways.com serves an identical 8,999-byte WAF/overflow holding page with
+      HTTP 200 for every path our client requested, including /.well-known/security.txt and
+      /openapi.json. HTTP 200 from britishairways.com is therefore meaningless as evidence and
+      is recorded as "soft-200" below.
+    probed:
+    - url: https://www.britishairways.com/openapi.json
+      status: 200
+      result: soft-200-html-holding-page
+    - url: https://www.britishairways.com/.well-known/security.txt
+      status: 200
+      result: soft-200-html-holding-page
+    - url: https://ndc.ba.com/openapi.json
+      status: 200
+      result: soft-200-angular-spa-shell
+    - url: https://ndc.ba.com/swagger.json
+      status: 200
+      result: soft-200-angular-spa-shell
+    - url: https://ndc.ba.com/.well-known/security.txt
+      status: 200
+      result: soft-200-angular-spa-shell
+    - url: https://ndc.ba.com/robots.txt
+      status: 200
+      result: soft-200-angular-spa-shell
+    - url: https://ndc.ba.com/sitemap.xml
+      status: 200
+      result: soft-200-angular-spa-shell
+    - url: https://developer.iairgroup.com/openapi.json
+      status: 404
+      result: not-found
+    - url: https://developer.iairgroup.com/swagger.json
+      status: 404
+      result: not-found
+    - url: https://developer.iairgroup.com/api-docs
+      status: 404
+      result: not-found
+    conclusion: >-
+      No OpenAPI, Swagger, WSDL, Postman collection or other machine-readable contract is
+      published anywhere on britishairways.com, ba.com, ndc.ba.com or iairgroup.com. Nothing
+      was harvested into openapi/ because nothing real exists to harvest.
+  githubOrganization:
+    checked:
+    - https://api.github.com/orgs/British-Airways
+    - https://api.github.com/orgs/britishairways
+    result: >-
+      Both return `Not Found`. British Airways publishes no GitHub organisation and no SDKs.
+  ndcSurface:
+    source: https://ndc.ba.com/main.7a41cb6e4d2487f7.js
+    fetched: '2026-07-28'
+    note: >-
+      Operation paths below are relative paths hard-coded into the NDC hub's own in-browser
+      sandbox screens. No host is published with them, so no baseURL is asserted anywhere in
+      this repository.
+    relativeOperationPaths:
+    - /AirShopping/17.2/V1
+    - /OfferPrice/17.2/V2
+    - /SeatAvailability/17.2/V2
+    - /ServiceList/17.2/V1
+    - /OrderCreate/17.2/V5
+    - /OrderRetrieve/17.2/V3
+    - /OrderChange/17.2/V4
+    - /OrderCancel/17.2/V1
+    - /OrderReshop/17.2/V3
+    hubRoutes:
+    - /api/docs
+    - /api/info
+    - /start/ndc-registrations
+    - /start/build-and-test-the-api
+    - /start/get-certified-and-go-live
+    - /developer/api-documentation
+    - /developer/ndc-product-api-roadmap
+    - /capability/ndc-offer-management
+    - /capability/ndc-order-management
+    - /capability/ndc-21.3-development-roadmap
+    - /service-technology-providers
+    - /faq/commercial/connecting-to-ndc
+    - /faq/commercial/pricing-and-ticketing
+    - /GDPRregulations
+    - /page/British-Airways-NDC-21.3-Pilot-Agent-Onboarding-Guide
+    - /page/OrderChangeNotification-API-17.2-vs-21.3-Comparison
+
+switchingCost:
+  interfaceShape:
+    value: standard-plus-proprietary
+    standard: IATA NDC / EDIST, namespace http://www.iata.org/IATA/EDIST/2017.2 (NDC 17.2), with a 21.3 pilot programme
+    evidence: >-
+      The contract is the IATA NDC message set - AirShopping, OfferPrice, SeatAvailability,
+      ServiceList, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange, OrderReShop and
+      OrderChangeNotif - which every NDC-enabled airline also implements, so the message
+      grammar itself is portable. What is not portable is BA's layer on top of it: BA applies
+      its own per-message version suffixes (/OfferPrice/17.2/V2, /OrderCreate/17.2/V5,
+      /OrderChange/17.2/V4, /OrderReshop/17.2/V3), publishes a BA-specific
+      "OrderChangeNotification API 17.2 vs 21.3 Comparison" and a BA-specific
+      "British Airways NDC 21.3 Pilot Agent Onboarding Guide", runs its own certification
+      regime, and publishes no schema, WSDL or OpenAPI. In practice an NDC integration built
+      against BA is re-tested and re-certified airline by airline rather than swapped.
+    reasoning: >-
+      Not `open-standard`, because the standard is not sufficient on its own - no BA schema is
+      published and BA-specific versioning and certification bind the implementation. Not
+      `proprietary-documented`, because the message set genuinely is IATA's and is
+      independently specified.
+  secondSource:
+    value: no-alternative
+    alternativesConsidered:
+    - Amadeus, Sabre and Travelport (GDS) - resell BA content, but they are channels to the same BA inventory, not another source of it, and BA prices that channel with a Distribution Technology Charge
+    - Duffel, AirGateway, TPConnects, Travelfusion, NuFlights, TripStack, Verteil - NDC aggregators that resell BA NDC content; again a different pipe to the same seats
+    - Other oneworld and interline carriers - substitutable on some routes but not for BA-marketed fares, BA Executive Club accrual, or BA-controlled ancillaries and seats
+    reasoning: >-
+      A seller can change how it reaches British Airways inventory - direct NDC, an aggregator,
+      or a GDS - and those routes are genuinely interchangeable at the commercial level. A
+      seller cannot obtain British Airways seats from anyone other than British Airways. For a
+      national flag carrier's own inventory there is no second source, and that is the finding.
+  exitPath:
+    value: no-export-published
+    evidence: >-
+      No export, dump, bulk or reporting operation appears anywhere in the documented NDC
+      message set. OrderRetrieve returns a single order by reference; it is a lookup, not a
+      portability mechanism. The decommissioned public REST API had no export operation
+      either. The NDC hub has a /GDPRregulations route, but it returns the SPA shell to an
+      unauthenticated client so its contents could not be verified. BA is a UK controller and
+      UK GDPR Article 20 data portability applies to passengers as individuals, but no
+      BA-published subject-access or portability endpoint or form could be verified - the
+      britishairways.com privacy pages returned the WAF holding page to our client, so the
+      absence of a consumer-facing request form is not proven, only unverifiable.
+    caveat: >-
+      Recorded as no-export-published rather than export-on-request because nothing that
+      constitutes a published export route could be fetched and read.
+  identifierPortability:
+    value: >-
+      Shared industry identifiers dominate the visible surface - IATA 3-character airport and
+      city codes (LHR, LON) as the location key, the BA/BAW airline designators, BA flight
+      numbers, 6-character PNR record locators, the IATA 125 ticket/AWB numbering prefix, and
+      IATA agency accreditation numbers for the Travel Agency Addendum - but the objects that
+      actually matter are BA-issued: NDC OfferIDs and OrderIDs minted by BA's host reservation
+      system, Executive Club membership numbers, and the per-partner client-key issued by BA.
+    evidence: >-
+      The archived Flight Information API reference specifies "IATA 3 character airport or city
+      code" for departureLocation/arrivalLocation and a mandatory `client-key` header
+      ("Your unique key used to authorise access to the API"). The DTC guide's definitions
+      section defines PNR as Passenger Name Record and ADM as Agent Debit Memo. IATA prefix 125
+      is BA's ticket and air waybill numbering prefix.
+    reasoning: >-
+      Route and schedule data hangs on identifiers that travel between systems. Offers, orders
+      and loyalty state hang on identifiers that do not - they are only resolvable inside BA.
+  contractualLockIn:
+    published: true
+    verbatim:
+      distributionTechnologyCharge:
+        source: https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf
+        version: v5.0 December 2019
+        retrievedVia: https://web.archive.org/web/20220703061722/https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf
+        retrievedStatus: 200
+        retrieved: '2026-07-28'
+        quotes:
+        - >-
+          "With effect on 1 November 2017, IAG operating companies British Airways Plc (BA) and
+          Iberia (IB) applied a Distribution Technology Charge on BA and IB marketed fares
+          (including BA and IB fares valid on codeshare partners) which are not booked through
+          an NDC based connection, or other low cost channels, such as ba.com and iberia.com
+          and the airlines call centres."
+        - >-
+          "The charge will be applied per fare component on all bookings ticketed from the
+          effective date."
+        - >-
+          "From 1 January 2020, the charge applied is EUR 13.00, GBP 11.00, USD 14.00,
+          JPY 1,500, CHF 14.00."
+        - >-
+          "The charge is collected through a Q charge applied to all applicable fare components
+          on fares which are not booked using an NDC based connection, or other low cost
+          channels, such as our websites and call-centres."
+        - >-
+          "The Distribution Technology Charge will be applied for each BA or IB marketed fare
+          component on bookings which are not booked using an NDC enabled connection, or booked
+          through other low cost channels, such as our websites and call-centres, regardless of
+          how they are subsequently ticketed."
+        note: >-
+          This is the most recent version of the guide that could be verified end to end. Trade
+          press reports a later increase (GBP 13.00) and the live guide at
+          britishairways.com/travel-partner-connect/.../distribution-technology-charge-guide
+          could not be fetched - ba.com returned the WAF holding page - so the current amount is
+          NOT asserted here.
+      apiAgreements:
+        source: https://developer.iairgroup.com/british_airways/plans/ndc_certification
+        retrievedVia: https://web.archive.org/web/20210303183958/https://developer.iairgroup.com/british_airways/plans/ndc_certification
+        retrievedStatus: 200
+        retrieved: '2026-07-28'
+        quotes:
+        - >-
+          "Complete required fields, ensuring that you select 'Issue a new key for Shop and
+          Order - test' and 'I agree to the terms of service' (British Airways API and Services
+          Trial Use Agreement.)"
+        - >-
+          "You will receive a B1 Certification Form (and in some cases additional questions) via
+          the email registered, complete these and email them back to NDC ServiceDesk. If you
+          are an IATA agent, you will be required to accept the Travel Agency Addendum."
+        - >-
+          "If/when you are approved for live access, you will receive a copy of our Live API
+          Contracts (Note: these will be tailored based on your business activity /required
+          access). These need to be signed and returned to us."
+        - >-
+          "You will receive access to the live environment within 5 working days after contracts
+          are signed by both parties."
+    notPublished:
+    - Minimum booking volumes or minimum term - referenced by trade press as "new minimum requirements for NDC partners" but no BA-published document could be verified
+    - Exclusivity or full-content clauses - not published
+    - Termination notice periods - not published
+    - Whether API access survives termination of the underlying agency agreement - not published
+    reasoning: >-
+      The one commercial term BA does publish is the strongest one: a per-fare-component
+      surcharge on every booking that does not come through BA's own NDC connection. That is
+      not a lock-in clause in a contract; it is a price applied to the alternative.
+  accessGate:
+    value: commercial-agreement
+    whatADeveloperMustDo:
+      pathB1_direct:
+      - Register on the BA developer portal (historically developer.ba.com, redirecting to developer.iairgroup.com/british_airways; both are now dead, so registration currently routes via ndc.ba.com/start/ndc-registrations and the NDC ServiceDesk)
+      - Accept the British Airways API and Services Trial Use Agreement
+      - Receive a client-key, initially disabled
+      - Complete and return a B1 Certification Form to the NDC ServiceDesk
+      - Accept the Travel Agency Addendum if an IATA accredited agent
+      - Develop against the test environment using technical specifications sent by email
+      - Demonstrate successful test bookings to BA's satisfaction
+      - Sign Live API Contracts tailored to the applicant's business activity, countersigned by BA
+      - Receive live access within 5 working days of both parties signing
+      pathB2_viaServiceProvider:
+      - Contract with an NDC Service Provider already connected to BA
+      - Complete a B2 Certification Form and register via the NDC ServiceDesk
+      - Accept the British Airways API and Services Trial Use Agreement, plus the Travel Agency Addendum if an IATA agent
+      - Receive provisional then full certification
+      pathGDS:
+      - Source BA content through a GDS, which carries the Distribution Technology Charge
+    gated: true
+    selfServe: false
+    reasoning: >-
+      Recorded as commercial-agreement rather than accredited-or-licensed because a signed,
+      bilaterally executed Live API Contract is required of every applicant, whereas IATA
+      accreditation only adds the Travel Agency Addendum and is not itself the gate - BA states
+      NDC is "open to all interested parties, subject to technical and commercial criteria,
+      including IATA agents, distribution providers and other parties."
+  distributionModel:
+    value: ndc-direct
+    ndcPosture: >-
+      British Airways and Iberia announced IATA NDC@Scale certification on 19 December 2019, at
+      the time the highest NDC certification level IATA awarded to an airline; the IAG developer
+      portal as archived on 2026-02-11 still stated "We have developed our NDC APIs and we are
+      IATA Level 3 certified." IATA has since sunset the levelled NDC certification registry in
+      favour of the Airline Retailing Maturity (ARM) index, so a current registry level cannot
+      be asserted. An NDC API is genuinely published in the sense that it exists, is described,
+      and has a live hub at ndc.ba.com - but no public endpoint, no schema and no self-serve
+      access. GDS bookings do carry a surcharge: the per-fare-component Distribution Technology
+      Charge, in force since 1 November 2017, applies to any BA or IB marketed fare not booked
+      through an NDC based connection or a BA low-cost channel.
+    gdsSurcharge: true
+    marketNote: >-
+      BA sits at one end of the UK distribution spectrum. Travelport, the third GDS, is British.
+      Duffel, also British, was built to route around GDS intermediation using the same NDC
+      standard BA implements. easyJet and Jet2 never used a GDS at all. BA is the interesting
+      middle case: a full-service legacy carrier with forty years of GDS dependency that priced
+      its own legacy channel to push sellers onto NDC.
+  netAssessment: >-
+    To leave British Airways as a supplier, a seller does not migrate - it stops selling BA.
+    What it can migrate is the connection: direct NDC, an aggregator, or a GDS, each a different
+    price and each requiring re-certification. There is no data to take with it, because there
+    is nothing to export; offers, orders and loyalty state live in BA's host reservation system
+    and are addressable only by BA-minted identifiers. The interface itself is the least of the
+    problem - IATA NDC is a real open standard and the message grammar is portable. The cost is
+    in certification, bilateral contracts, and the fact that the inventory has exactly one owner.
+
+sources:
+- url: https://ndc.ba.com/
+  status: 200
+  fetched: '2026-07-28'
+  type: Portal
+  note: British Airways NDC Communication Hub. Live Angular SPA; documentation and sandbox behind Microsoft Entra External ID login.
+- url: https://ndc.ba.com/main.7a41cb6e4d2487f7.js
+  status: 200
+  fetched: '2026-07-28'
+  type: ApplicationBundle
+  note: Source of the NDC operation paths, hub routes, and the IATA EDIST 2017.2 namespace recorded above.
+- url: https://developer.iairgroup.com/british_airways
+  status: 404
+  fetched: '2026-07-28'
+  type: LegacyPortal
+  note: Dead. Archived 200 capture at https://web.archive.org/web/20260211133148/https://developer.iairgroup.com/british_airways lists the BA API plans - NDC, Flight Offers, Lowest Prices, Entertainment, Hotel/Flight/Cars, Flight Status - and states "We have developed our NDC APIs and we are IATA Level 3 certified."
+- url: https://developer.iairgroup.com/british_airways/plans/ndc
+  status: 404
+  fetched: '2026-07-28'
+  type: LegacyDocumentation
+  note: Archived 2025-08-04 capture describes "Our NDC IATA 17.2 APIs" and names AirShopping, OfferPrice, SeatAvailability, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange, OrderReShop and OrderChangeNotif.
+- url: https://developer.iairgroup.com/british_airways/plans/ndc_certification
+  status: 404
+  fetched: '2026-07-28'
+  type: LegacyDocumentation
+  note: Archived 2021-03-03 capture is the source of the B1/B2 certification and contracting quotes above.
+- url: https://developer.iairgroup.com/british_airways/ApiInfo
+  status: 404
+  fetched: '2026-07-28'
+  type: LegacyDocumentation
+  note: >-
+    Archived 2021-12-02 capture documents the REST URI format
+    https://api.ba.com/rest-v1/{resourceVersion}/{resourceName};{filters} using matrix parameters,
+    with JSON and XML negotiated by extension or Accept header.
+- url: https://developer.iairgroup.com/british_airways/apis/Flight_Info
+  status: 404
+  fetched: '2026-07-28'
+  type: LegacyDocumentation
+  note: >-
+    Archived 2021-12-02 capture states "These APIs are no longer supported", gives the live
+    endpoint https://api.ba.com/rest-v1/v1/flights, an end-of-life date of Dec 2015, a mandatory
+    `client-key` header, and IATA 3-character airport/city codes as location identifiers.
+- url: https://api.ba.com/rest-v1/v1/flights
+  status: 596
+  fetched: '2026-07-28'
+  type: Gateway
+  note: ERR_596_SERVICE_NOT_FOUND from Mashery. Public REST API decommissioned.
+- url: https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf
+  status: 200
+  fetched: '2026-07-28'
+  type: Policy
+  note: >-
+    Retrieved from the Internet Archive (2022-07-03 capture, HTTP 200) because ba.com returns a
+    WAF holding page to our client. Document is "Distribution Technology Charge Guide", v5.0
+    December 2019, British Airways / Iberia / oneworld branded, 9 pages.
+- url: https://mediacentre.britishairways.com/pressrelease/details/11927
+  status: 200
+  fetched: '2026-07-28'
+  type: PressRelease
+  note: >-
+    19 December 2019 - "British Airways and Iberia achieve IATA NDC @Scale certification",
+    described as the highest certification level IATA provides to airlines on the NDC standard;
+    states over 4,000 agencies connected to NDC and that agencies can connect directly to the
+    NDC APIs, use aggregator solutions, or book through the IAG booking portal.
+- url: https://www.iairgroup.com/
+  status: 200
+  fetched: '2026-07-28'
+  type: Investors
+  note: International Consolidated Airlines Group, BA's parent.
+
+actions:
+  apisYmlCreated: true
+  openapiHarvested: false
+  specsCount: 0
+  reason: >-
+    No machine-readable API contract of any kind is published by British Airways, IAG or the
+    NDC hub. Nothing was written to openapi/ because inventing one would be fabrication. The
+    single apis[] entry describes the NDC API as it is actually documented, with no baseURL,
+    because BA publishes no production host.
