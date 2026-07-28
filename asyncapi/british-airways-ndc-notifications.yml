@@ -1,0 +1,69 @@
+generated: '2026-07-28'
+method: searched
+spec_type: none
+source: >-
+  Archived https://developer.iairgroup.com/british_airways/plans/ndc (2025-08-04 capture, which
+  names OrderChangeNotif in the British Airways NDC 17.2 message set) and
+  https://ndc.ba.com/main.7a41cb6e4d2487f7.js, whose router publishes
+  /page/OrderChangeNotification-API-17.2-vs-21.3-Comparison.
+description: >-
+  British Airways does have an airline-initiated event surface — the IATA NDC
+  OrderChangeNotification message, by which British Airways pushes involuntary changes to an
+  order (schedule change, cancellation, disruption, re-accommodation) to the seller that owns
+  it, rather than requiring the seller to poll OrderRetrieve. British Airways publishes no
+  AsyncAPI document, no channel binding and no payload schema for it, and the one comparison
+  page it does publish sits behind the NDC hub login. This artifact records the event surface
+  that genuinely exists and stops there; no message schema is asserted.
+asyncapi_published: false
+asyncapi_probed:
+  - {url: 'https://ndc.ba.com/asyncapi.yaml', status: 200, result: soft-200-angular-spa-shell}
+  - {url: 'https://ndc.ba.com/asyncapi.json', status: 200, result: soft-200-angular-spa-shell}
+transport:
+  style: airline-initiated push over the NDC connection
+  protocol: XML over HTTP (IATA EDIST)
+  note: >-
+    In the IATA NDC model OrderChangeNotif is delivered to a seller endpoint agreed during
+    certification. British Airways publishes neither the callback registration mechanism nor
+    the delivery, retry or acknowledgement semantics, so none are asserted here.
+events:
+  - name: OrderChangeNotif
+    display_name: OrderChangeNotification
+    direction: airline-to-seller
+    ndc_release: '17.2'
+    purpose: >-
+      Notify the owning seller of a change British Airways has made to an existing order —
+      typically an involuntary schedule change, flight cancellation, disruption or
+      re-accommodation — so the seller can service the passenger without polling.
+    payload_schema: not-published
+    evidence:
+      - >-
+        Listed among the British Airways NDC 17.2 messages on the archived IAG developer portal
+        alongside AirShopping, OfferPrice, SeatAvailability, OrderCreate, OrderRetrieve,
+        AirDocIssue, OrderChange and OrderReShop.
+      - >-
+        The NDC hub publishes a dedicated page,
+        "OrderChangeNotification API 17.2 vs 21.3 Comparison", indicating the message is
+        actively versioned across the 17.2 production and 21.3 pilot releases.
+    migration_note:
+      url: https://ndc.ba.com/page/OrderChangeNotification-API-17.2-vs-21.3-Comparison
+      access: gated
+webhooks:
+  self_serve_registration: false
+  management_ui: false
+  note: >-
+    There is no self-serve webhook registration, no endpoint management screen and no signature
+    verification scheme in the public domain. Delivery destinations are configured through the
+    NDC ServiceDesk as part of B1/B2 certification.
+polling_alternative:
+  message: OrderRetrieve
+  path: /OrderRetrieve/17.2/V3
+  note: Single-order lookup by reference; the fallback where notification is not enabled.
+gaps:
+  - No AsyncAPI document at any version
+  - No published payload schema, channel address or binding
+  - No published retry, ordering or acknowledgement semantics
+  - No published signature or authentication scheme for inbound notifications
+  - No event catalog page reachable without a Microsoft Entra External ID login
+related:
+  - conventions/british-airways-conventions.yml
+  - lifecycle/british-airways-lifecycle.yml

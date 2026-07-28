@@ -1,0 +1,116 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://ndc.ba.com/main.7a41cb6e4d2487f7.js; archived
+  https://developer.iairgroup.com/british_airways/ApiInfo (2021-12-02 capture) and
+  /british_airways/apis/Flight_Info; IATA EDIST 2017.2 namespace declared by the NDC hub.
+description: >-
+  Cross-cutting request/response semantics for the British Airways API surface. Two very
+  different generations are documented here: the live NDC message API, which is XML-over-HTTP
+  in the IATA EDIST grammar, and the retired public REST API, whose conventions are recorded
+  because they are the only place British Airways ever published a request/response contract in
+  detail. Where a convention is genuinely not published it is recorded as null rather than
+  guessed.
+surfaces:
+  - name: NDC message API
+    status: live
+    style: message-oriented XML over HTTP (IATA EDIST)
+    published_contract: false
+  - name: public REST API
+    status: decommissioned
+    style: REST with matrix parameters
+    published_contract: partial (archived reference pages only)
+protocol:
+  ndc:
+    media_type: application/xml
+    namespace: http://www.iata.org/IATA/EDIST/2017.2
+    pattern: >-
+      Request/response message pairs rather than resource CRUD. Each message is its own
+      endpoint — AirShopping, OfferPrice, SeatAvailability, ServiceList, OrderCreate,
+      OrderRetrieve, OrderChange, OrderCancel, OrderReshop — and business intent is expressed
+      inside the message body, not by HTTP method or path shape.
+    method: POST (implied by the message-pair pattern; not explicitly documented publicly)
+  rest_retired:
+    uri_template: https://api.ba.com/rest-v1/{resourceVersion}/{resourceName};{filters}
+    filter_style: matrix parameters (RFC 3986 path segment parameters, `;name=value`)
+    content_negotiation: >-
+      JSON or XML, selected either by file extension on the resource name (.json / .xml) or by
+      the Accept header. Documented examples include /rest-v1/v1/flights.json and
+      /rest-v1/v1/ife.xml.
+    gateway: TIBCO Mashery
+authentication:
+  style: apiKey header
+  header: client-key
+  detail: authentication/british-airways-authentication.yml
+  note: >-
+    A single opaque key identifies the partner. There is no per-request signing, no bearer
+    token exchange and no scope model published for the API itself.
+versioning:
+  style: uri-path
+  detail: lifecycle/british-airways-lifecycle.yml
+  shape: /<Message>/<IATA NDC release>/<BA revision>  e.g. /OrderChange/17.2/V4
+  header_versioning: false
+  note: >-
+    Each message carries its own British Airways revision number, so a partner integration
+    pins nine independently-moving versions rather than one API version.
+idempotency:
+  supported: unknown
+  header: null
+  note: >-
+    No idempotency key, request-deduplication window or retry-safety contract is published for
+    any British Airways message. NDC OrderCreate is a booking-creating operation where this
+    would matter most, and the absence is a real gap in the published contract — but absence of
+    documentation is not evidence the platform lacks it internally. An `Idempotency` pointer is
+    deliberately NOT emitted in apis.yml.
+pagination:
+  supported: unknown
+  style: null
+  note: >-
+    No pagination convention is published. AirShopping and OrderReshop return offer sets whose
+    size limits are not documented publicly.
+filtering:
+  ndc: >-
+    Expressed inside the EDIST request message (origin/destination pairs, travel dates,
+    passenger types, cabin and fare preferences), not as query parameters.
+  rest_retired: matrix parameters appended to the resource segment
+error_envelope:
+  format: iata-edist-errors
+  media_type: application/xml
+  problem_json: false
+  detail: >-
+    IATA EDIST responses carry Errors/Error elements with a code and short text. British
+    Airways publishes no error-code registry, no error reference page and no RFC 9457
+    problem+json contract, so errors/ carries no catalog for this provider — nothing real
+    exists to derive one from.
+rate_limiting:
+  published: false
+  headers: null
+  note: >-
+    No rate-limit policy, quota or response header is published. Volume expectations, if any,
+    are set in the bilateral Live API Contract.
+request_tracing:
+  request_id_header: null
+  published: false
+identifiers:
+  shared_industry:
+    - {id: IATA airport/city code, example: LHR, note: 3-character location key}
+    - {id: airline designator, example: BA / BAW}
+    - {id: PNR record locator, example: 6-character alphanumeric}
+    - {id: IATA ticketing prefix, example: '125', note: British Airways ticket and air waybill numbering prefix}
+    - {id: IATA agency accreditation number, note: required for the Travel Agency Addendum}
+  ba_minted:
+    - {id: OfferID, note: minted by the BA host reservation system, resolvable only inside BA}
+    - {id: OrderID, note: minted by the BA host reservation system, resolvable only inside BA}
+    - {id: client-key, note: per-partner credential issued by BA}
+    - {id: Executive Club membership number}
+notifications:
+  supported: true
+  mechanism: OrderChangeNotif (EDIST push notification)
+  detail: asyncapi/british-airways-ndc-notifications.yml
+sandbox:
+  detail: sandbox/british-airways-sandbox.yml
+related:
+  - authentication/british-airways-authentication.yml
+  - lifecycle/british-airways-lifecycle.yml
+  - conformance/british-airways-conformance.yml
+  - asyncapi/british-airways-ndc-notifications.yml

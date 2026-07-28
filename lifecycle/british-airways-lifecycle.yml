@@ -1,0 +1,121 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://ndc.ba.com/main.7a41cb6e4d2487f7.js (per-message version routes and roadmap routes);
+  archived https://developer.iairgroup.com/british_airways/plans/ndc and
+  /british_airways/apis/Flight_Info; live probes of api.ba.com and developer.iairgroup.com on
+  2026-07-28.
+description: >-
+  British Airways versions its API surface at the message level, not at the API level: each NDC
+  message carries both the IATA NDC release (17.2) and a British Airways-specific revision
+  (V1..V5) in its path. There is no published deprecation policy, no SLA, and no status page.
+  The lifecycle evidence that does exist is a record of withdrawal — the entire public REST API
+  and the developer portal that documented it were removed, the portal within the last six
+  months.
+versioning:
+  scheme: standard-release-plus-per-message-revision
+  mechanism: >-
+    URI path segment of the form /<Message>/<NDC release>/<BA revision>, e.g.
+    /OrderCreate/17.2/V5. The IATA release moves rarely; the BA revision moves per message and
+    independently of the other messages.
+  current: '17.2'
+  pilot: '21.3'
+  observed_message_versions:
+    - {message: AirShopping, path: /AirShopping/17.2/V1, revision: V1}
+    - {message: OfferPrice, path: /OfferPrice/17.2/V2, revision: V2}
+    - {message: SeatAvailability, path: /SeatAvailability/17.2/V2, revision: V2}
+    - {message: ServiceList, path: /ServiceList/17.2/V1, revision: V1}
+    - {message: OrderCreate, path: /OrderCreate/17.2/V5, revision: V5}
+    - {message: OrderRetrieve, path: /OrderRetrieve/17.2/V3, revision: V3}
+    - {message: OrderChange, path: /OrderChange/17.2/V4, revision: V4}
+    - {message: OrderCancel, path: /OrderCancel/17.2/V1, revision: V1}
+    - {message: OrderReshop, path: /OrderReshop/17.2/V3, revision: V3}
+  note: >-
+    These are relative paths hard-coded into the NDC hub's own in-browser sandbox screens. No
+    host is published alongside them, so no baseURL is asserted anywhere in this repository.
+roadmap:
+  published: true
+  urls:
+    - https://ndc.ba.com/developer/ndc-product-api-roadmap
+    - https://ndc.ba.com/capability/ndc-21.3-development-roadmap
+  access: gated
+  note: >-
+    Both are routes in the NDC hub's Angular router and both return the SPA shell to an
+    unauthenticated client, so the roadmap exists as a published destination but its contents
+    could not be read without a Microsoft Entra External ID login.
+migration_guides:
+  - title: OrderChangeNotification API 17.2 vs 21.3 Comparison
+    url: https://ndc.ba.com/page/OrderChangeNotification-API-17.2-vs-21.3-Comparison
+    access: gated
+  - title: British Airways NDC 21.3 Pilot Agent Onboarding Guide
+    url: https://ndc.ba.com/page/British-Airways-NDC-21.3-Pilot-Agent-Onboarding-Guide
+    access: gated
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  note: >-
+    No deprecation policy, notice period or RFC 8594 Sunset/Deprecation header support is
+    published. A `Deprecation` pointer is deliberately NOT emitted in apis.yml — the record
+    below is evidence of deprecations having happened, not of a policy governing them.
+retired:
+  - name: British Airways public REST API
+    surface: https://api.ba.com/rest-v1/{resourceVersion}/{resourceName};{filters}
+    apis:
+      - Flight Information
+      - Flight Status
+      - Flight Offers
+      - Lowest Prices
+      - In-Flight Entertainment
+      - Hotel / Car / Flight packages
+    end_of_life_announced: '2015-12'
+    announcement_text: These APIs are no longer supported
+    verified_status:
+      url: https://api.ba.com/rest-v1/v1/flights
+      status: 596
+      body: 'x-mashery-error-code: ERR_596_SERVICE_NOT_FOUND'
+      fetched: '2026-07-28'
+    note: >-
+      No service is mapped behind the Mashery gateway for any documented resource, with or
+      without an api_key parameter. The API is decommissioned, not merely unsupported.
+  - name: IAG Developer Programs portal
+    url: https://developer.iairgroup.com/british_airways
+    verified_status:
+      status: 404
+      body: Area Not found
+      server: Mashery Proxy
+      fetched: '2026-07-28'
+    last_seen_live: '2026-02-11'
+    note: >-
+      Internet Archive CDX shows successful 200 captures on 2025-03-13, 2025-05-23 and
+      2026-02-11. The portal that carried every British Airways API plan was withdrawn between
+      February and July 2026 with no published notice, redirect or replacement.
+  - name: developer.ba.com
+    verified_status:
+      status: 200
+      result: generic ba.com holding page, not a developer portal
+      fetched: '2026-07-28'
+    note: The archived IAG portal's JavaScript redirected developer.ba.com to developer.iairgroup.com.
+status_page:
+  published: false
+  probed:
+    - {url: 'https://status.ba.com/', status: 000, result: does-not-resolve}
+  note: >-
+    No status page, uptime dashboard or incident feed is published for the NDC API or for
+    ba.com. A `StatusPage` pointer is deliberately NOT emitted.
+sla:
+  published: false
+  note: >-
+    No SLA or uptime target is published. Service commitments, if any, live in the bilateral
+    Live API Contracts that certified partners sign; those are not public.
+support:
+  channel: NDC ServiceDesk
+  routes:
+    - https://ndc.ba.com/faq/technical
+    - https://ndc.ba.com/faq/commercial/connecting-to-ndc
+  note: Email-based service desk reached via the registration flow; no public ticketing surface.
+deprecated_operations: []
+related:
+  - conventions/british-airways-conventions.yml
+  - conformance/british-airways-conformance.yml
+  - authentication/british-airways-authentication.yml

@@ -1,0 +1,77 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0/.well-known/openid-configuration
+  (fetched 2026-07-28, HTTP 200)
+description: >-
+  The only OAuth 2.0 / OpenID Connect scope surface British Airways exposes publicly. These
+  scopes belong to the Microsoft Entra External ID (CIAM) tenant that authenticates developers
+  and partners into the NDC Communication Hub at ndc.ba.com — they govern who can read the NDC
+  documentation and use the in-browser sandbox screens, not what an integration may do against
+  the NDC message API. British Airways publishes no scope model for the NDC API itself; API
+  authorisation is carried by a certification-gated client-key and a signed Live API Contract,
+  not by scopes. See authentication/british-airways-authentication.yml.
+scope_of_this_document: developer-portal-login
+covers_api_authorization: false
+schemes:
+  - name: EntraExternalID
+    type: openIdConnect
+    provider: Microsoft Entra External ID (CIAM)
+    tenant_id: 45c0456f-2aef-40f6-847e-d3d957348527
+    issuer: https://45c0456f-2aef-40f6-847e-d3d957348527.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0
+    source: well-known/british-airways-openid-configuration.json
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/authorize
+        tokenUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/token
+      - flow: implicit
+        authorizationUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/authorize
+        note: id_token and id_token token response types are advertised as supported
+      - flow: deviceCode
+        deviceAuthorizationUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/devicecode
+        tokenUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/token
+scopes:
+  - scope: openid
+    description: >-
+      Request an ID token — authenticate the developer/partner user against the British Airways
+      Entra External ID tenant.
+    flows: [authorizationCode, implicit, deviceCode]
+    sources: [well-known/british-airways-openid-configuration.json]
+  - scope: profile
+    description: Release basic profile claims (name, preferred_username) into the ID token.
+    flows: [authorizationCode, implicit, deviceCode]
+    sources: [well-known/british-airways-openid-configuration.json]
+  - scope: email
+    description: Release the email claim into the ID token.
+    flows: [authorizationCode, implicit, deviceCode]
+    sources: [well-known/british-airways-openid-configuration.json]
+  - scope: offline_access
+    description: Issue a refresh token so the hub session can be renewed without re-prompting.
+    flows: [authorizationCode, deviceCode]
+    sources: [well-known/british-airways-openid-configuration.json]
+claims_supported:
+  - sub
+  - iss
+  - aud
+  - exp
+  - iat
+  - auth_time
+  - acr
+  - nonce
+  - preferred_username
+  - name
+  - email
+  - tid
+  - ver
+  - at_hash
+  - c_hash
+notes:
+  - >-
+    scopes_supported contains only the four standard OIDC scopes. No British Airways
+    application-specific scope (no api://... resource scope, no NDC-specific permission) is
+    advertised anonymously; any such scope would live on a protected resource registration
+    that is not publicly discoverable.
+  - >-
+    tls_client_certificate_bound_access_tokens is true and an mTLS token endpoint alias is
+    published (mtlsauth.microsoft.com), so certificate-bound tokens (RFC 8705) are available
+    on this tenant.

@@ -62,10 +62,24 @@ apis:
     url: https://ndc.ba.com/
   - type: GettingStarted
     url: https://ndc.ba.com/start/build-and-test-the-api
-  - type: Signup
+  - type: SignUp
     url: https://ndc.ba.com/start/ndc-registrations
   - type: Support
     url: https://ndc.ba.com/faq/technical
+  - type: DeveloperPortal
+    url: https://ndc.ba.com/
+  - type: Roadmap
+    url: https://ndc.ba.com/developer/ndc-product-api-roadmap
+  - type: Authentication
+    url: authentication/british-airways-authentication.yml
+  - type: Conventions
+    url: conventions/british-airways-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/british-airways-lifecycle.yml
+  - type: Webhooks
+    url: asyncapi/british-airways-ndc-notifications.yml
+  - type: Sandbox
+    url: sandbox/british-airways-sandbox.yml
   - type: Documentation
     url: https://ndc.ba.com/capability/ndc-offer-management
   - type: Documentation
@@ -73,6 +87,34 @@ apis:
   - type: LegacyPortal
     url: https://developer.iairgroup.com/british_airways
 common:
+- type: DomainSecurity
+  url: security/british-airways-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/british-airways-vulnerability-disclosure.yml
+- type: Security
+  url: https://hackerone.com/british_airways_vdp
+- type: Authentication
+  url: authentication/british-airways-authentication.yml
+- type: OAuthScopes
+  url: scopes/british-airways-scopes.yml
+- type: WellKnown
+  url: well-known/british-airways-well-known.yml
+- type: Conformance
+  url: conformance/british-airways-conformance.yml
+- type: Lifecycle
+  url: lifecycle/british-airways-lifecycle.yml
+- type: Conventions
+  url: conventions/british-airways-conventions.yml
+- type: Webhooks
+  url: asyncapi/british-airways-ndc-notifications.yml
+- type: Sandbox
+  url: sandbox/british-airways-sandbox.yml
+- type: Packages
+  url: packages/british-airways-packages.yml
+- type: LLMsTxt
+  url: llms/british-airways-llms.txt
+- type: Roadmap
+  url: https://ndc.ba.com/developer/ndc-product-api-roadmap
 - type: Website
   url: https://www.britishairways.com/
 - type: Portal

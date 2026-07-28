@@ -1,0 +1,105 @@
+generated: '2026-07-28'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface for every British Airways host
+  reachable from apis.yml. British Airways publishes no baseURL and no OpenAPI, so the hosts
+  probed are the NDC Communication Hub (ndc.ba.com), the decommissioned Mashery gateway
+  (api.ba.com), the marketing/booking host (www.britishairways.com), and the Microsoft Entra
+  External ID CIAM tenant that the NDC hub's own MSAL configuration authenticates against
+  (baexternalid.ciamlogin.com, tenant 45c0456f-2aef-40f6-847e-d3d957348527, discovered in the
+  hub application bundle main.7a41cb6e4d2487f7.js).
+caveat: >-
+  ndc.ba.com is an Angular single-page application that answers HTTP 200 with the same ~12-17KB
+  SPA shell for every path, and www.britishairways.com answers HTTP 200 with an 8,999-byte WAF
+  holding page ("We are experiencing high demand on ba.com at the moment") for every path. On
+  those two hosts a 200 is NOT evidence that a document exists; those results are recorded as
+  soft-200 and nothing was saved from them. Only the OIDC discovery document returned a real,
+  correctly-typed payload and it is the only file saved verbatim.
+hosts:
+  - host: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527
+    role: Microsoft Entra External ID (CIAM) tenant backing the NDC hub login
+    documents:
+      - path: /v2.0/.well-known/openid-configuration
+        status: 200
+        real: true
+        content_type: application/json
+        file: british-airways-openid-configuration.json
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: true
+        note: identical payload to the /v2.0 path; saved once
+      - path: /v2.0/.well-known/oauth-authorization-server
+        status: 404
+        real: false
+  - host: https://ndc.ba.com
+    role: British Airways NDC Communication Hub (Angular SPA)
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        real: false
+        note: soft-200 SPA shell, 12,531 bytes of HTML — not an RFC 9116 document
+      - path: /.well-known/api-catalog
+        status: 200
+        real: false
+        note: soft-200 SPA shell, 17,204 bytes of HTML — not an RFC 9727 catalog
+      - path: /llms.txt
+        status: 200
+        real: false
+        note: soft-200 SPA shell — no llms.txt is published
+      - path: /robots.txt
+        status: 200
+        real: false
+        note: soft-200 SPA shell
+      - path: /openapi.json
+        status: 200
+        real: false
+        note: soft-200 SPA shell
+      - path: /swagger.json
+        status: 200
+        real: false
+        note: soft-200 SPA shell
+      - path: /api/info
+        status: 200
+        real: false
+        note: soft-200 SPA shell — this is an in-app Angular route, not an API endpoint
+      - path: /api/docs
+        status: 200
+        real: false
+        note: soft-200 SPA shell — this is an in-app Angular route, not an API endpoint
+  - host: https://api.ba.com
+    role: decommissioned TIBCO Mashery gateway for the retired public REST API
+    documents:
+      - path: /.well-known/security.txt
+        status: 596
+        real: false
+        note: x-mashery-error-code ERR_596_SERVICE_NOT_FOUND — no service mapped behind the gateway
+  - host: https://www.britishairways.com
+    role: consumer booking / marketing site
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        real: false
+        note: soft-200 WAF holding page (8,999 bytes)
+      - path: /openapi.json
+        status: 200
+        real: false
+        note: soft-200 WAF holding page
+  - host: https://developer.iairgroup.com
+    role: retired IAG Developer Programs portal (Mashery)
+    documents:
+      - path: /openapi.json
+        status: 404
+        real: false
+      - path: /swagger.json
+        status: 404
+        real: false
+      - path: /api-docs
+        status: 404
+        real: false
+security_txt:
+  published: false
+  note: >-
+    No RFC 9116 security.txt was found on britishairways.com, ba.com, ndc.ba.com or api.ba.com.
+    British Airways nevertheless runs a real vulnerability disclosure programme — it is hosted on
+    HackerOne rather than advertised via security.txt. See
+    security/british-airways-vulnerability-disclosure.yml.

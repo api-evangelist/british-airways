@@ -1,0 +1,65 @@
+# British Airways
+
+> British Airways Plc is the United Kingdom's flag carrier, headquartered at Waterside near London Heathrow and owned since 2011 by International Consolidated Airlines Group (IAG). Its only live API surface is the IATA New Distribution Capability (NDC) distribution API, operated jointly across IAG for British Airways and Iberia. There is no public specification, no published base URL, no self-serve signup and no exit path: access requires registration, B1 or B2 certification, acceptance of the British Airways API and Services Trial Use Agreement, and signed Live API Contracts.
+
+## Important — what an agent can and cannot do here
+
+- British Airways publishes **no OpenAPI, Swagger, WSDL, AsyncAPI or Postman collection**. Every candidate location was probed on 2026-07-28 and returned 404, a Mashery 596, or a soft-200 SPA/WAF shell. Do not assume a spec exists.
+- There is **no self-serve access**. A client-key is issued disabled and is enabled only after certification and a bilaterally signed contract.
+- `api.ba.com` (the old public REST gateway) is **decommissioned** — it returns `ERR_596_SERVICE_NOT_FOUND` for every documented resource.
+- `developer.iairgroup.com` (the IAG Developer Programs portal) returns **HTTP 404**; it was live as recently as 2026-02-11 and has since been withdrawn.
+- `ndc.ba.com` is an Angular single-page application that returns HTTP 200 with the same shell for every path. **A 200 from ndc.ba.com is not evidence a document exists.**
+
+## APIs
+
+- [British Airways NDC API](https://ndc.ba.com/developer/api-documentation): IATA NDC / EDIST 17.2 message API for flight shopping, ordering, ticketing and post-booking servicing. Messages: AirShopping, OfferPrice, SeatAvailability, ServiceList, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange, OrderCancel, OrderReShop, OrderChangeNotif. A 21.3 pilot runs alongside 17.2 production. No base URL is published.
+
+## Docs
+
+- [NDC Communication Hub](https://ndc.ba.com/): the developer portal — documentation and sandbox behind a Microsoft Entra External ID login
+- [API documentation](https://ndc.ba.com/developer/api-documentation)
+- [Build and test the API](https://ndc.ba.com/start/build-and-test-the-api)
+- [NDC registrations](https://ndc.ba.com/start/ndc-registrations)
+- [Get certified and go live](https://ndc.ba.com/start/get-certified-and-go-live)
+- [NDC offer management](https://ndc.ba.com/capability/ndc-offer-management)
+- [NDC order management](https://ndc.ba.com/capability/ndc-order-management)
+- [NDC product API roadmap](https://ndc.ba.com/developer/ndc-product-api-roadmap)
+- [NDC 21.3 development roadmap](https://ndc.ba.com/capability/ndc-21.3-development-roadmap)
+- [Technical FAQ](https://ndc.ba.com/faq/technical)
+- [Commercial FAQ — connecting to NDC](https://ndc.ba.com/faq/commercial/connecting-to-ndc)
+
+## Commercial
+
+- [Distribution Technology Charge Guide](https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf): since 1 November 2017 IAG applies a per-fare-component charge to British Airways and Iberia marketed fares not booked through an NDC based connection or a low-cost channel such as ba.com. As of the v5.0 December 2019 guide the charge was EUR 13.00 / GBP 11.00 / USD 14.00 / JPY 1,500 / CHF 14.00, collected as a Q charge. Trade press reports a later increase; the current amount is not asserted here.
+- [Travel Partner Connect](https://www.britishairways.com/travel-partner-connect/en/kr/policies/booking-and-ticketing/distribution-technology-charge-guide)
+
+## Security
+
+- [British Airways VDP on HackerOne](https://hackerone.com/british_airways_vdp): public, open-submission vulnerability disclosure programme. No bounties. Wildcard scopes `*.britishairways.com` and `*.ba.com` — which includes `ndc.ba.com`. Public disclosure is prohibited without written authorisation. Reports are accepted only through HackerOne; there is no security@ address and no `/.well-known/security.txt`.
+
+## Artifacts in this repository
+
+- [apis.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/apis.yml): the APIs.json index
+- [review.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/review.yml): full switching-cost and access-gate review, with every probe and its HTTP status
+- [authentication/british-airways-authentication.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/authentication/british-airways-authentication.yml): the client-key credential model and the Entra External ID login
+- [scopes/british-airways-scopes.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/scopes/british-airways-scopes.yml): OIDC scopes for hub login (not API authorisation)
+- [well-known/british-airways-well-known.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/well-known/british-airways-well-known.yml): the `/.well-known/` probe results, including the one real hit
+- [well-known/british-airways-openid-configuration.json](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/well-known/british-airways-openid-configuration.json): verbatim OIDC discovery document
+- [conventions/british-airways-conventions.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/conventions/british-airways-conventions.yml): message grammar, versioning shape, identifiers, error envelope
+- [lifecycle/british-airways-lifecycle.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/lifecycle/british-airways-lifecycle.yml): per-message versioning, the roadmap, and the retired REST API and portal
+- [conformance/british-airways-conformance.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/conformance/british-airways-conformance.yml): IATA NDC, OIDC, and everything that is absent
+- [asyncapi/british-airways-ndc-notifications.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/asyncapi/british-airways-ndc-notifications.yml): the OrderChangeNotif event surface
+- [sandbox/british-airways-sandbox.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/sandbox/british-airways-sandbox.yml): the gated test environment and the certification path
+- [packages/british-airways-packages.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/packages/british-airways-packages.yml): no official SDKs in any language
+- [security/british-airways-vulnerability-disclosure.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/security/british-airways-vulnerability-disclosure.yml): the HackerOne programme, scopes and rules
+- [security/british-airways-domain-security.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/security/british-airways-domain-security.yml): TLS, HSTS, DNSSEC, CAA, SPF and DMARC probe results
+
+## Not published
+
+- OpenAPI / Swagger / WSDL / AsyncAPI / Postman collection
+- A production base URL for the NDC API
+- Error code registry, rate-limit policy, idempotency contract, pagination convention
+- SDKs, a CLI, embedded UI components, a public GitHub organisation
+- A status page, an SLA, a deprecation policy, or a dated changelog
+- A trust centre or any named security certification
+- `/.well-known/security.txt`

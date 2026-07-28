@@ -1,0 +1,99 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://ndc.ba.com/start/build-and-test-the-api and https://ndc.ba.com/start/get-certified-and-go-live
+  (routes in the NDC hub Angular router); archived
+  https://developer.iairgroup.com/british_airways/plans/ndc_certification (2021-03-03 capture).
+description: >-
+  British Airways runs a real test environment for NDC — a partner develops against it, must
+  demonstrate successful test bookings to British Airways' satisfaction, and only then receives
+  live credentials. It is a gated sandbox, not a self-serve one: there is no public console, no
+  anonymous playground, and no published magic test values. Everything below is what British
+  Airways actually documents about the sandbox; no test identifier, card number, PNR or fare is
+  invented here because none is published.
+access:
+  self_serve: false
+  gate: registration + Trial Use Agreement + certification
+  console_public: false
+  note: >-
+    The NDC hub's in-browser sandbox screens exist as Angular routes and are the only console
+    British Airways offers, but they are behind a Microsoft Entra External ID login
+    (see authentication/british-airways-authentication.yml).
+modes:
+  - name: test
+    label: Shop and Order - test
+    credential: client-key
+    how_to_obtain: >-
+      Register via the NDC ServiceDesk selecting "Issue a new key for Shop and Order - test"
+      and accepting the British Airways API and Services Trial Use Agreement. The key is issued
+      in a disabled state and enabled for test use only.
+    verbatim: >-
+      "Complete required fields, ensuring that you select 'Issue a new key for Shop and Order -
+      test' and 'I agree to the terms of service' (British Airways API and Services Trial Use
+      Agreement.)"
+  - name: live
+    credential: client-key
+    how_to_obtain: >-
+      Pass B1 (direct) or B2 (via an NDC Service Provider) certification, return the
+      certification form to the NDC ServiceDesk, accept the Travel Agency Addendum if an IATA
+      accredited agent, and sign the Live API Contracts tailored to your business activity.
+    verbatim: >-
+      "You will receive access to the live environment within 5 working days after contracts are
+      signed by both parties."
+certification:
+  paths:
+    - id: B1
+      label: direct connection
+      steps:
+        - Register and accept the Trial Use Agreement
+        - Receive a disabled client-key
+        - Complete and return the B1 Certification Form to the NDC ServiceDesk
+        - Accept the Travel Agency Addendum if an IATA accredited agent
+        - Develop against the test environment using technical specifications sent by email
+        - Demonstrate successful test bookings to British Airways' satisfaction
+        - Sign Live API Contracts, countersigned by British Airways
+    - id: B2
+      label: via an NDC Service Provider
+      steps:
+        - Contract with an NDC Service Provider already connected to British Airways
+        - Complete a B2 Certification Form and register via the NDC ServiceDesk
+        - Accept the Trial Use Agreement, plus the Travel Agency Addendum if an IATA agent
+        - Receive provisional then full certification
+  docs:
+    - https://ndc.ba.com/start/ndc-registrations
+    - https://ndc.ba.com/start/build-and-test-the-api
+    - https://ndc.ba.com/start/get-certified-and-go-live
+technical_specifications:
+  delivery: email
+  public: false
+  note: >-
+    Technical specifications are sent to the registered email address after registration. They
+    are not published, which is why no schema, WSDL or OpenAPI exists in openapi/.
+test_values:
+  published: false
+  test_cards: null
+  test_pnrs: null
+  test_routes: null
+  time_simulation: null
+  note: >-
+    No magic test values of any kind are published — no test card numbers, no test PNR record
+    locators, no reserved test routes or fare families, no test clock. Whatever fixtures exist
+    arrive with the emailed technical specifications under the Trial Use Agreement.
+sandbox_message_surface:
+  note: >-
+    The hub's own sandbox screens are wired to these relative message paths (extracted from the
+    application bundle). No host accompanies them.
+  paths:
+    - /AirShopping/17.2/V1
+    - /OfferPrice/17.2/V2
+    - /SeatAvailability/17.2/V2
+    - /ServiceList/17.2/V1
+    - /OrderCreate/17.2/V5
+    - /OrderRetrieve/17.2/V3
+    - /OrderChange/17.2/V4
+    - /OrderCancel/17.2/V1
+    - /OrderReshop/17.2/V3
+related:
+  - authentication/british-airways-authentication.yml
+  - conventions/british-airways-conventions.yml
+  - lifecycle/british-airways-lifecycle.yml

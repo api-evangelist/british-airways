@@ -74,10 +74,33 @@ Recorded in full in [review.yml](review.yml).
 | Access gate | `commercial-agreement` — Trial Use Agreement, B1/B2 certification form, Travel Agency Addendum for IATA agents, signed Live API Contracts |
 | Distribution model | `ndc-direct`, with GDS available and surcharged |
 
+## Artifacts
+
+| Artifact | File | Method |
+| --- | --- | --- |
+| Authentication | [authentication/british-airways-authentication.yml](authentication/british-airways-authentication.yml) | searched |
+| OAuth scopes | [scopes/british-airways-scopes.yml](scopes/british-airways-scopes.yml) | searched |
+| Well-known | [well-known/british-airways-well-known.yml](well-known/british-airways-well-known.yml) | searched |
+| OIDC discovery (verbatim) | [well-known/british-airways-openid-configuration.json](well-known/british-airways-openid-configuration.json) | searched |
+| Conventions | [conventions/british-airways-conventions.yml](conventions/british-airways-conventions.yml) | searched |
+| Lifecycle | [lifecycle/british-airways-lifecycle.yml](lifecycle/british-airways-lifecycle.yml) | searched |
+| Conformance | [conformance/british-airways-conformance.yml](conformance/british-airways-conformance.yml) | searched |
+| Event surface (OrderChangeNotif) | [asyncapi/british-airways-ndc-notifications.yml](asyncapi/british-airways-ndc-notifications.yml) | searched |
+| Sandbox | [sandbox/british-airways-sandbox.yml](sandbox/british-airways-sandbox.yml) | searched |
+| Packages | [packages/british-airways-packages.yml](packages/british-airways-packages.yml) | searched |
+| Vulnerability disclosure | [security/british-airways-vulnerability-disclosure.yml](security/british-airways-vulnerability-disclosure.yml) | searched |
+| Domain security | [security/british-airways-domain-security.yml](security/british-airways-domain-security.yml) | probed |
+| llms.txt | [llms/british-airways-llms.txt](llms/british-airways-llms.txt) | generated |
+
+Not produced, because nothing real exists to produce them from: `openapi/`, `overlays/`, `grpc/`, `errors/`, `data-model/`, `skills/`, `mcp/`, `cli/`, `components/`, `changelog/`.
+
 ## Notes
 
 - There is **no self-serve developer portal**. The only live API-facing property is [ndc.ba.com](https://ndc.ba.com/), whose documentation and sandbox sit behind a Microsoft Entra External ID login.
 - The IAG Developer Programs portal at `developer.iairgroup.com` — which carried BA's public consumer REST APIs (Flight Information, Flight Offers, Lowest Prices, In-Flight Entertainment, Hotel/Car/Flight packages) — returned HTTP 404 for every path on 2026-07-28. The Internet Archive shows it live as recently as 2026-02-11.
 - `api.ba.com` returns `ERR_596_SERVICE_NOT_FOUND` for every documented resource. BA's public REST API is decommissioned.
 - No OpenAPI, Swagger, WSDL or Postman collection is published anywhere. Nothing was harvested into `openapi/`.
-- British Airways publishes no GitHub organisation and no SDKs.
+- British Airways publishes no GitHub organisation and no SDKs. npm, PyPI, Maven Central, NuGet, RubyGems, Packagist, crates.io and pkg.go.dev were all searched on 2026-07-28 — zero first-party client libraries.
+- The one machine-readable document British Airways does serve is an **OpenID Connect discovery document**, at the Microsoft Entra External ID (CIAM) tenant `45c0456f-2aef-40f6-847e-d3d957348527` that the NDC hub logs developers into. It is saved verbatim in `well-known/`. It governs hub login, not API authorisation.
+- British Airways runs a real, public **vulnerability disclosure programme on HackerOne** ([british_airways_vdp](https://hackerone.com/british_airways_vdp)) — open submissions, no bounties, wildcard scopes `*.britishairways.com` and `*.ba.com`, which puts `ndc.ba.com` in scope. There is no `/.well-known/security.txt` on any BA host.
+- No trust centre, no named certifications, no status page, no SLA, no deprecation policy and no dated changelog were found, so no `Compliance`, `StatusPage` or `Deprecation` pointer is emitted.

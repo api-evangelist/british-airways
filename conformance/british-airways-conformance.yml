@@ -1,0 +1,123 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://ndc.ba.com/main.7a41cb6e4d2487f7.js (IATA EDIST namespace and NDC message routes);
+  https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0/.well-known/openid-configuration;
+  https://mediacentre.britishairways.com/pressrelease/details/11927 (NDC@Scale certification);
+  archived IAG Developer Programs pages for the NDC 17.2 message set and the retired REST API.
+description: >-
+  Which cross-cutting and industry standards the British Airways API surface actually conforms
+  to. The dominant standard is IATA New Distribution Capability (NDC) / EDIST — British Airways
+  is one of the reference implementations of it — but almost every modern API-hygiene standard
+  is absent because no machine-readable contract is published at all.
+standards:
+  - id: iata-ndc
+    conforms: true
+    version: '17.2'
+    evidence: >-
+      The NDC Communication Hub application bundle carries the IATA EDIST XML namespace
+      http://www.iata.org/IATA/EDIST/2017.2 and routes the sandbox screens at
+      /AirShopping/17.2/V1, /OfferPrice/17.2/V2, /SeatAvailability/17.2/V2, /ServiceList/17.2/V1,
+      /OrderCreate/17.2/V5, /OrderRetrieve/17.2/V3, /OrderChange/17.2/V4, /OrderCancel/17.2/V1
+      and /OrderReshop/17.2/V3.
+  - id: iata-ndc-21.3
+    conforms: partial
+    version: '21.3'
+    evidence: >-
+      A 21.3 pilot programme runs alongside 17.2 production. The hub publishes
+      /capability/ndc-21.3-development-roadmap and a
+      "British Airways NDC 21.3 Pilot Agent Onboarding Guide"; 21.3 is not the production
+      version.
+  - id: iata-edist
+    conforms: true
+    evidence: >-
+      The message grammar is the IATA EDIST XML message set (AirShopping, OfferPrice,
+      SeatAvailability, ServiceList, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange,
+      OrderReShop, OrderChangeNotif), namespace-declared as EDIST/2017.2.
+  - id: iata-ndc-certification
+    conforms: true
+    evidence: >-
+      British Airways and Iberia announced IATA NDC@Scale certification on 19 December 2019,
+      then the highest NDC certification level IATA awarded an airline. The IAG developer portal
+      as archived 2026-02-11 stated "We have developed our NDC APIs and we are IATA Level 3
+      certified."
+    caveat: >-
+      IATA has since sunset the levelled NDC certification registry in favour of the Airline
+      Retailing Maturity (ARM) index, so a current registry level is not asserted.
+  - id: oidc
+    conforms: true
+    scope: developer-portal-login
+    evidence: >-
+      A live OpenID Connect Discovery 1.0 document is served at
+      baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0/.well-known/openid-configuration
+      (HTTP 200, 2026-07-28) for the Entra External ID tenant behind ndc.ba.com. This governs
+      hub login, not the NDC API.
+  - id: oauth2
+    conforms: true
+    scope: developer-portal-login
+    evidence: >-
+      Authorization Code, implicit and Device Authorization Grant endpoints are advertised in
+      the discovery document; token endpoint auth methods include private_key_jwt (RFC 7523).
+  - id: rfc8705-mtls-bound-tokens
+    conforms: true
+    scope: developer-portal-login
+    evidence: >-
+      tls_client_certificate_bound_access_tokens is true and an mTLS token endpoint alias is
+      published at mtlsauth.microsoft.com.
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: false
+    evidence: >-
+      /.well-known/oauth-authorization-server returns 404 on the CIAM tenant; only the OIDC
+      discovery document is served.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger document exists on britishairways.com, ba.com, ndc.ba.com,
+      api.ba.com or iairgroup.com. Every candidate path returned a 404, a Mashery 596, or a
+      soft-200 SPA/WAF shell.
+  - id: wsdl
+    conforms: false
+    evidence: >-
+      The NDC messages are XML but no WSDL or XSD schema is published; the IATA EDIST schemas
+      are IATA's and are distributed to certified partners, not by British Airways.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      OrderChangeNotif is a real notification message in the 17.2 set but no AsyncAPI document
+      is published. See asyncapi/british-airways-ndc-notifications.yml.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      No JSON error contract is published; NDC errors are carried in EDIST XML Errors elements,
+      which are not RFC 9457 problem+json.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: No /.well-known/security.txt on any British Airways host.
+  - id: rfc9727-api-catalog
+    conforms: false
+    evidence: /.well-known/api-catalog returns the ndc.ba.com SPA shell, not a catalog document.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation header support is documented; the retired REST API was withdrawn
+      without a published sunset mechanism.
+  - id: json-api
+    conforms: false
+    evidence: The NDC surface is XML; the retired REST API used matrix-parameter URIs, not JSON:API.
+  - id: uk-gdpr
+    conforms: true
+    scope: data-protection-regime
+    evidence: >-
+      British Airways is a UK controller subject to UK GDPR, and the NDC hub carries a
+      /GDPRregulations route. The route returns the SPA shell unauthenticated, so its contents
+      could not be read and no specific portability or subject-access mechanism is asserted.
+  - id: iata-resolution-753
+    conforms: unknown
+    evidence: Not published on any British Airways developer surface; not asserted.
+compliance_programme:
+  published: false
+  note: >-
+    British Airways publishes no trust centre and no named security certifications (SOC 2, ISO
+    27001, PCI DSS attestation) on any developer-facing property. trust.ba.com does not resolve.
+    A `Compliance` pointer is deliberately NOT emitted — the only verified security programme is
+    the HackerOne VDP, which is recorded as VulnerabilityDisclosure/Security, not compliance.

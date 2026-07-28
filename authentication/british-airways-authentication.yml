@@ -1,0 +1,101 @@
+generated: '2026-07-28'
+method: searched
+source: >-
+  https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0/.well-known/openid-configuration
+  (fetched 2026-07-28, HTTP 200); https://ndc.ba.com/main.7a41cb6e4d2487f7.js (MSAL
+  configuration in the NDC hub application bundle); archived IAG Developer Programs portal
+  pages for the retired public REST API and the NDC certification flow.
+description: >-
+  British Airways publishes no OpenAPI, so no securityScheme could be derived mechanically.
+  This profile was assembled from the two authentication surfaces that are actually observable:
+  the OpenID Connect discovery document of the Microsoft Entra External ID (CIAM) tenant that
+  the NDC Communication Hub logs developers into, and the archived documentation for the
+  client-key credential the NDC and legacy REST APIs consume. The hub login and the API
+  credential are separate things — logging into ndc.ba.com does not grant API access; a
+  client-key is issued disabled and only enabled through certification and a signed contract.
+summary:
+  types: [openIdConnect, apiKey]
+  api_key_in: [header]
+  oauth2_flows: [authorizationCode, implicit, deviceCode]
+  self_serve: false
+  gate: commercial-agreement
+schemes:
+  - name: EntraExternalID
+    type: openIdConnect
+    applies_to: >-
+      Developer/partner login to the British Airways NDC Communication Hub (ndc.ba.com) — its
+      documentation, sandbox screens and registration flows. Not the NDC message API itself.
+    openIdConnectUrl: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0/.well-known/openid-configuration
+    issuer: https://45c0456f-2aef-40f6-847e-d3d957348527.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/v2.0
+    tenant_id: 45c0456f-2aef-40f6-847e-d3d957348527
+    tenant_region_scope: EU
+    provider: Microsoft Entra External ID (CIAM)
+    client_library: MSAL (bundled in the hub's Angular application)
+    endpoints:
+      authorization: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/authorize
+      token: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/token
+      device_authorization: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/devicecode
+      end_session: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/logout
+      jwks: https://baexternalid.ciamlogin.com/45c0456f-2aef-40f6-847e-d3d957348527/discovery/v2.0/keys
+      userinfo: https://graph.microsoft.com/oidc/userinfo
+      mtls_token: https://mtlsauth.microsoft.com/45c0456f-2aef-40f6-847e-d3d957348527/oauth2/v2.0/token
+    response_types_supported: [code, id_token, code id_token, id_token token]
+    response_modes_supported: [query, fragment, form_post]
+    token_endpoint_auth_methods_supported:
+      - client_secret_post
+      - private_key_jwt
+      - client_secret_basic
+      - self_signed_tls_client_auth
+    id_token_signing_alg_values_supported: [RS256]
+    subject_types_supported: [pairwise]
+    tls_client_certificate_bound_access_tokens: true
+    scopes: [openid, profile, email, offline_access]
+    scopes_artifact: scopes/british-airways-scopes.yml
+    frontchannel_logout_supported: true
+  - name: client-key
+    type: apiKey
+    in: header
+    parameter_name: client-key
+    applies_to: >-
+      The British Airways API credential. Documented for the retired public REST API
+      ("Your unique key used to authorise access to the API") and carried forward as the
+      credential issued at NDC registration ("Issue a new key for Shop and Order - test").
+    issuance: >-
+      Issued on registration in a disabled state. Enabled for test only after the British
+      Airways API and Services Trial Use Agreement is accepted, and for live only after B1 or
+      B2 certification is passed and Live API Contracts are signed by both parties — live
+      access follows within 5 working days of countersignature.
+    source: >-
+      https://web.archive.org/web/20211202/https://developer.iairgroup.com/british_airways/ApiInfo
+      and https://web.archive.org/web/20210303183958/https://developer.iairgroup.com/british_airways/plans/ndc_certification
+    status: >-
+      The public REST API this key was documented against is decommissioned (api.ba.com returns
+      ERR_596_SERVICE_NOT_FOUND). For NDC the credential model is described but no production
+      host, header specification or token exchange is published.
+ndc_api_authentication:
+  published: false
+  note: >-
+    British Airways publishes no authentication specification for the NDC message API itself.
+    No production base URL, no WSDL, no OpenAPI and no securityScheme are in the public domain.
+    What is documented is the process by which credentials are granted, not the wire format.
+    Anything more specific would be fabrication.
+access_gate:
+  self_serve: false
+  value: commercial-agreement
+  steps:
+    - Register via https://ndc.ba.com/start/ndc-registrations and the NDC ServiceDesk
+    - Accept the British Airways API and Services Trial Use Agreement
+    - Receive a client-key, initially disabled
+    - Complete a B1 (direct) or B2 (via an NDC Service Provider) Certification Form
+    - Accept the Travel Agency Addendum if an IATA accredited agent
+    - Build and demonstrate successful test bookings against the test environment
+    - Sign Live API Contracts, tailored to business activity, countersigned by British Airways
+  docs:
+    - https://ndc.ba.com/start/ndc-registrations
+    - https://ndc.ba.com/start/build-and-test-the-api
+    - https://ndc.ba.com/start/get-certified-and-go-live
+related:
+  - scopes/british-airways-scopes.yml
+  - well-known/british-airways-well-known.yml
+  - conformance/british-airways-conformance.yml
+  - sandbox/british-airways-sandbox.yml

@@ -1,0 +1,42 @@
+generated: '2026-07-28'
+method: searched
+description: >-
+  British Airways publishes no client libraries. npm, PyPI, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist and crates.io were searched, and the GitHub organisations British-Airways,
+  britishairways and iairgroup were checked — British Airways operates no public GitHub
+  organisation and ships no SDK in any language. Integration is by raw IATA EDIST XML message
+  exchange against a certified connection, or through a third-party NDC aggregator that
+  maintains its own libraries. The one package below is a third-party scraper, recorded for
+  completeness and explicitly not endorsed as a client library.
+official_sdks: 0
+registries_searched:
+  - {registry: npm, query: british airways ndc, matches: 0, result: no first-party package}
+  - {registry: pypi, query: britishairways, matches: 1, result: one third-party package (see below), no first-party package}
+  - {registry: maven-central, query: british airways, matches: 0, result: no first-party package}
+  - {registry: nuget, query: british airways, matches: 0, result: no first-party package}
+  - {registry: rubygems, query: british airways, matches: 0, result: no first-party package}
+  - {registry: packagist, query: british airways, matches: 0, result: no first-party package}
+  - {registry: crates.io, query: british airways, matches: 1, result: unrelated (a Google Flights client), no first-party package}
+  - {registry: pkg.go.dev, query: british airways, result: no first-party module}
+github_organizations_checked:
+  - {org: British-Airways, status: not-found}
+  - {org: britishairways, status: not-found}
+  - {org: iairgroup, status: not-found}
+packages:
+  - language: python
+    registry: pypi
+    name: britishairways
+    version: 0.1.1
+    url: https://pypi.org/project/britishairways/
+    source: https://github.com/alexechoi/british-airways-py
+    install: pip install britishairways
+    official: false
+    author: Alex Choi
+    summary: A Python package for fetching British Airways flight prices.
+    note: >-
+      Independent third-party project. It scrapes/consumes British Airways consumer pricing
+      surfaces; it is not a client for the NDC API and is not endorsed, supported or
+      distributed by British Airways.
+note: >-
+  Because no official SDK exists, no `SDKs` pointer is emitted in apis.yml — only `Packages`.
+  This is the accurate state of the ecosystem, not a gap in the search.
