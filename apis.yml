@@ -33,7 +33,7 @@ tags:
 - Airports
 created: '2026-07-28'
 modified: '2026-07-28'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: british-airways:british-airways-ndc-api
   name: British Airways NDC API
