@@ -20,6 +20,17 @@ description: >-
   Offers, Lowest Prices, In-Flight Entertainment, Hotel/Car/Flight packages) on the IAG
   Developer Programs portal are gone: as of 2026-07-28 developer.iairgroup.com returns HTTP 404
   and api.ba.com returns HTTP 596 ERR_596_SERVICE_NOT_FOUND for every documented resource.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://images.ctfassets.net/nwnmkeyu03hy/1qDtSOnE37fsTzD4GPdfFN/347c175022b9aec007a10630028a4439/British-Airways-logo.png
 tags:
 - Travel
