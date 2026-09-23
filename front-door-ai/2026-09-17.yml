@@ -1,0 +1,21 @@
+# Front Door AI Index — british-airways — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: british-airways
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.britishairways.com
+  final_host: www.britishairways.com
+  ownership: own
+  owner: british-airways
+  shares_host_with: null
+  inherited_from: null
+  verdict: thin
+  score: null
+  host_score: null
+  density: null
+  words: 26
+  tiers: null
+  ambiguous: null
+  top_terms: null
