@@ -1,4 +1,4 @@
-# British Airways (british-airways)
+# British Airways
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,107 +64,99 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-British Airways Plc is the United Kingdom's flag carrier, headquartered at Waterside near London Heathrow and owned since 2011 by International Consolidated Airlines Group (IAG), which also owns Iberia, Aer Lingus, Vueling and LEVEL. In the distribution chain BA is a supplier of its own seat inventory, reached either through the three legacy GDSs, through IATA NDC connections it operates itself, or direct on ba.com. BA was one of the earliest and most aggressive NDC adopters: from 1 November 2017 IAG applied a per-fare-component Distribution Technology Charge to BA and Iberia marketed fares that are not booked through an NDC based connection or a low-cost channel such as ba.com, explicitly pricing GDS intermediation out of the stack. Its API posture is honest to state plainly — the NDC distribution API is real and is built on the IATA EDIST message set, but there is no public specification, no published base URL, no self-serve signup and no exit path.
+British Airways Plc is the United Kingdom's flag carrier, headquartered at Waterside near London Heathrow and owned since 2011 by International Consolidated Airlines Group (IAG), which also owns Iberia, Aer Lingus, Vueling and LEVEL. In the distribution chain BA is a supplier of its own seat inventory, reached either through the three legacy GDSs, through IATA NDC connections it operates itself, or direct on ba.com. BA was one of the earliest and most aggressive NDC adopters: from 1 November 2017 IAG applied a per-fare-component Distribution Technology Charge to BA and Iberia marketed fares that are not booked through an NDC based connection or a low-cost channel such as ba.com, explicitly pricing GDS intermediation out of the stack. Its API posture is honest to state plainly - the NDC distribution API is real and is built on the IATA EDIST message set, but there is no public specification, no published base URL, no self-serve signup and no exit path. Access requires registration, a B1 or B2 certification form, acceptance of the British Airways API and Services Trial Use Agreement plus the Travel Agency Addendum for IATA accredited agents, and signed live API contracts. The older public consumer REST APIs (Flight Information, Flight Offers, Lowest Prices, In-Flight Entertainment, Hotel/Car/Flight packages) on the IAG Developer Programs portal are gone: as of 2026-07-28 developer.iairgroup.com returns HTTP 404 and api.ba.com returns HTTP 596 ERR_596_SERVICE_NOT_FOUND for every documented resource.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/british-airways/refs/heads/main/apis.yml)
+**Areas:** Travel · United Kingdom · Aviation · Airlines · Distribution · NDC · Booking · Corporate Travel · Airports
 
-## Tags
+## British Airways on APIs.io
 
-- Travel
-- United Kingdom
-- Aviation
-- Airline
-- Distribution
-- NDC
-- Booking
-- Corporate Travel
-- Airports
+Everything profiled for British Airways is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/british-airways/](https://apis.io/providers/british-airways/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (1)
 
-- **Created:** 2026-07-28
-- **Modified:** 2026-07-28
+- [British Airways NDC API](https://apis.io/apis/british-airways/british-airways-ndc-api/) — British Airways' IATA New Distribution Capability API - a direct link into BA's host reservation system for flight shopping, ordering, ticketing and…
 
-## APIs
+### Published properties
 
-### British Airways NDC API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-British Airways' IATA New Distribution Capability API — a direct link into BA's host reservation system for flight shopping, ordering, ticketing and post-booking servicing, operated jointly across IAG for BA and Iberia. It implements the IATA EDIST message set (the ndc.ba.com application carries the XML namespace `http://www.iata.org/IATA/EDIST/2017.2`), with a 21.3 pilot programme running alongside the 17.2 production version. The IAG developer portal described the 17.2 plan as AirShopping, OfferPrice, SeatAvailability, OrderCreate, OrderRetrieve, AirDocIssue, OrderChange, OrderReShop and OrderChangeNotif. No OpenAPI or WSDL is published, no production base URL is published, and there is no self-serve access.
+#### AsyncAPI (1)
 
-- **Human URL:** [https://ndc.ba.com/developer/api-documentation](https://ndc.ba.com/developer/api-documentation)
-- **Base URL:** not published
+Event-driven and webhook contracts.
 
-#### Tags
+- [British Airways Ndc Notifications](https://apis.io/asyncapis/british-airways/british-airways-ndc-notifications/)
 
-- NDC
-- Distribution
-- Flights
-- Booking
-- Ticketing
+#### Security (3)
 
-#### Properties
+Authentication, trust centre, and vulnerability disclosure.
 
-- [Documentation](https://ndc.ba.com/developer/api-documentation)
-- [Portal](https://ndc.ba.com/)
-- [Getting Started](https://ndc.ba.com/start/build-and-test-the-api)
-- [Signup](https://ndc.ba.com/start/ndc-registrations)
-- [Support](https://ndc.ba.com/faq/technical)
-- [Documentation — Offer Management](https://ndc.ba.com/capability/ndc-offer-management)
-- [Documentation — Order Management](https://ndc.ba.com/capability/ndc-order-management)
-- [Legacy Portal](https://developer.iairgroup.com/british_airways) — HTTP 404 as of 2026-07-28
+- [British Airways Authentication](https://apis.io/security/british-airways/british-airways-authentication/)
+- [British Airways Domain Security](https://apis.io/security/british-airways/british-airways-domain-security/)
+- [British Airways Vulnerability Disclosure](https://apis.io/security/british-airways/british-airways-vulnerability-disclosure/)
 
-## Common Properties
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [British Airways Scopes](https://apis.io/scopes/british-airways/british-airways-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.britishairways.com/)
-- [Portal](https://ndc.ba.com/)
-- [Partner Portal](https://www.britishairways.com/travel-partner-connect/en/kr/policies/booking-and-ticketing/distribution-technology-charge-guide)
-- [Documentation — Distribution Technology Charge Guide](https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf)
-- [Legacy Portal](https://developer.iairgroup.com/british_airways)
-- [Newsroom](https://mediacentre.britishairways.com/)
-- [Investors](https://www.iairgroup.com/)
-- [LinkedIn](https://www.linkedin.com/company/british-airways)
+- [Documentation](https://www.britishairways.com/assets/pdfs/updates/distribution-technology-charge.pdf)
+- [Security](https://hackerone.com/british_airways_vdp)
 
-## Switching Cost
+## API Evangelist rating
 
-Recorded in full in [review.yml](review.yml).
+**Kin Score 27.2** — thin · rubric 0.24.0 · scored 2026-10-17
 
-| Dimension | Value |
-| --- | --- |
-| Interface shape | `standard-plus-proprietary` — IATA NDC / EDIST 17.2, extended with BA-specific per-message versions and certification |
-| Second source | `no-alternative` — the connection is swappable, the inventory is not |
-| Exit path | `no-export-published` — no export, dump or bulk operation in the NDC message set |
-| Identifier portability | IATA airport/city codes, BA/BAW designators, PNR record locators, IATA 125 ticket prefix — but BA-minted OfferIDs, OrderIDs and client-keys for anything that matters |
-| Contractual lock-in | Distribution Technology Charge applied per fare component to every non-NDC booking since 1 Nov 2017 |
-| Access gate | `commercial-agreement` — Trial Use Agreement, B1/B2 certification form, Travel Agency Addendum for IATA agents, signed Live API Contracts |
-| Distribution model | `ndc-direct`, with GDS available and surcharged |
+| Facet | Score |
+|---|---|
+| Discoverability | 65.2 |
+| Contract quality | 39.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 19.0 |
+| Access clarity | 0.0 |
 
-## Artifacts
+**Agent readiness 23.7** — agent-aware
 
-| Artifact | File | Method |
-| --- | --- | --- |
-| Authentication | [authentication/british-airways-authentication.yml](authentication/british-airways-authentication.yml) | searched |
-| OAuth scopes | [scopes/british-airways-scopes.yml](scopes/british-airways-scopes.yml) | searched |
-| Well-known | [well-known/british-airways-well-known.yml](well-known/british-airways-well-known.yml) | searched |
-| OIDC discovery (verbatim) | [well-known/british-airways-openid-configuration.json](well-known/british-airways-openid-configuration.json) | searched |
-| Conventions | [conventions/british-airways-conventions.yml](conventions/british-airways-conventions.yml) | searched |
-| Lifecycle | [lifecycle/british-airways-lifecycle.yml](lifecycle/british-airways-lifecycle.yml) | searched |
-| Conformance | [conformance/british-airways-conformance.yml](conformance/british-airways-conformance.yml) | searched |
-| Event surface (OrderChangeNotif) | [asyncapi/british-airways-ndc-notifications.yml](asyncapi/british-airways-ndc-notifications.yml) | searched |
-| Sandbox | [sandbox/british-airways-sandbox.yml](sandbox/british-airways-sandbox.yml) | searched |
-| Packages | [packages/british-airways-packages.yml](packages/british-airways-packages.yml) | searched |
-| Vulnerability disclosure | [security/british-airways-vulnerability-disclosure.yml](security/british-airways-vulnerability-disclosure.yml) | searched |
-| Domain security | [security/british-airways-domain-security.yml](security/british-airways-domain-security.yml) | probed |
-| llms.txt | [llms/british-airways-llms.txt](llms/british-airways-llms.txt) | generated |
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-Not produced, because nothing real exists to produce them from: `openapi/`, `overlays/`, `grpc/`, `errors/`, `data-model/`, `skills/`, `mcp/`, `cli/`, `components/`, `changelog/`.
+**Regulatory alignment 32.4** — Horizontal (data, software, accessibility, platform)
 
-## Notes
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/british-airways/](https://apis.io/providers/british-airways/).
 
-- There is **no self-serve developer portal**. The only live API-facing property is [ndc.ba.com](https://ndc.ba.com/), whose documentation and sandbox sit behind a Microsoft Entra External ID login.
-- The IAG Developer Programs portal at `developer.iairgroup.com` — which carried BA's public consumer REST APIs (Flight Information, Flight Offers, Lowest Prices, In-Flight Entertainment, Hotel/Car/Flight packages) — returned HTTP 404 for every path on 2026-07-28. The Internet Archive shows it live as recently as 2026-02-11.
-- `api.ba.com` returns `ERR_596_SERVICE_NOT_FOUND` for every documented resource. BA's public REST API is decommissioned.
-- No OpenAPI, Swagger, WSDL or Postman collection is published anywhere. Nothing was harvested into `openapi/`.
-- British Airways publishes no GitHub organisation and no SDKs. npm, PyPI, Maven Central, NuGet, RubyGems, Packagist, crates.io and pkg.go.dev were all searched on 2026-07-28 — zero first-party client libraries.
-- The one machine-readable document British Airways does serve is an **OpenID Connect discovery document**, at the Microsoft Entra External ID (CIAM) tenant `45c0456f-2aef-40f6-847e-d3d957348527` that the NDC hub logs developers into. It is saved verbatim in `well-known/`. It governs hub login, not API authorisation.
-- British Airways runs a real, public **vulnerability disclosure programme on HackerOne** ([british_airways_vdp](https://hackerone.com/british_airways_vdp)) — open submissions, no bounties, wildcard scopes `*.britishairways.com` and `*.ba.com`, which puts `ndc.ba.com` in scope. There is no `/.well-known/security.txt` on any BA host.
-- No trust centre, no named certifications, no status page, no SLA, no deprecation policy and no dated changelog were found, so no `Compliance`, `StatusPage` or `Deprecation` pointer is emitted.
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for British Airways: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/british-airways/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
